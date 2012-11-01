@@ -30,10 +30,10 @@ td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:obl
 $("document").ready(function() {
 	
     $.getJSON("results.json", function(data) {
-
+		$listings = data['searchresult'];
         $("#div-my-table").text("<table>");
 var urlList = "";
-        $.each(data, function(i, item) {
+        $.each($listings, function(i, item) {
 			$("#div-my-tabl").append("<tr>");
 			$("#div-my-tabl").append("<td id=1>"+item.name+"</td>");
 			$("#div-my-tabl").append("<br>");
