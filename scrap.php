@@ -109,7 +109,6 @@
     fwrite($fp, json_encode($response));
     fclose($fp);
 
-        
     $airdom->clear();
     $homepage = file_get_contents('./output.html', false);
 	echo $homepage;               
