@@ -10,14 +10,47 @@
 		return $conto[0];
 	}
 	
-    // Include the library
-    include('simple_html_dom.php');
-    $place = $_POST['place'];
-	$startdate = $_POST['startdate'];
-	$endate = $_POST['enddate'];
-	$guest = $_POST['guest'];
-	$room = $_POST['room'];
+	function getYelpInfo($location){
+		//DO SCRAPPING
+	}
 	
+	// Include the library
+	include('simple_html_dom.php');
+	if($_SERVER['REQUEST_METHOD']=='POST'){
+		$place = $_POST['place'];
+		if(array_key_exists('startdate', $_POST))
+			$startdate = $_POST['startdate'];
+		else
+			$startdate = '';
+		if(array_key_exists('endate', $_POST))
+			$endate = $_POST['endate'];
+		else
+			$endate = '';
+		
+		$guest = $_POST['guest'];
+		$room = $_POST['room'];
+	}
+	else{
+		$place = $_GET['place'];
+		if(array_key_exists('startdate', $_GET))
+			$startdate = $_POST['startdate'];
+		else
+			$startdate = '';
+		if(array_key_exists('endate', $_GET))
+			$endate = $_POST['endate'];
+		else
+			$endate = '';
+		if(array_key_exists('guest', $_GET))
+			$guest = $_GET['guest'];
+		else
+			$guest = '';
+		if(array_key_exists('room', $_GET))
+			$room = $_GET['room'];
+		else
+			$room = '';
+	}
+	
+	getYelpInfo($place);
 	
 	$airdest = str_replace(array(" ", ","), array("-", "--"), $place);
 	$homedest = str_replace(array(" ", ","), array( "+", "%2C"), $place);

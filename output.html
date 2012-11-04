@@ -22,9 +22,8 @@
 	display:none;
 	position:absolute;
 	width:50%;
-	
 	top:0px;
-	background:yellow;
+	
 	
 }
 #result-container{
@@ -68,21 +67,49 @@ $(window).on('scroll', function () {
 	
 	function addToCompare(currentElement){
 		var comp = document.getElementById('comparator');
+		var index = parseInt(currentElement.getAttribute("index"));
+		
 		//Removes previous compared listing
-		if(comp.length >= 1){
+		
+		if($('#comparator').length >= 1){
+			var checkboxes = document.getElementsByClassName('checkitem');
+			//alert(checkboxes.length);
+			for(var i = 0; i < checkboxes.length; i+=1)
+			{
+				if(i!=index){
+					checkboxes[i].childNodes[0].checked = false;
+				}
+			}
+			
 			comp.innerHTML = '';
 		}
-		
+		if(currentElement.checked){
+			showComparator();
+			var listing = resultJSON.searchresult[index];
+			
+			var comp = document.getElementById('comparator');
+			var image = document.createElement('img');
+			image.setAttribute('src',listing.image);
+			image.setAttribute('style','float:left;margin:10');
+			comp.appendChild(image);
+			var text = document.createElement('p');
+			text.innerHTML = listing.name + '<br>' + listing.currency;
+			
+			comp.appendChild(text);
+		}
+		else{
+			hideComparator();
+		}
 	}
+	
+	
+	var resultJSON;
 
 </script>
 </head>
 <body>
 <h2 id="title">Bed Breakfast & Beyond</h2>
-<button onclick="showComparator()">Show</button>
-<button onclick="hideComparator()">Hide</button>
-
-
+<a href="./index.html"> Enter another search </a>
 <div id="result-container" style="position:relative">
 	<div id="comparator">Comparator</div>
 	<div id="div-my-tabl"></div>
@@ -92,7 +119,8 @@ $(window).on('scroll', function () {
 <script>
 $("document").ready(function() {
 	
-    $.getJSON("results.json", function(data) {
+	$.getJSON("results.json", function(data) {
+		resultJSON = data;
 		$listings = data['searchresult'];
 		var results = document.getElementById('div-my-tabl');
 		var resultTable = document.createElement('table');
@@ -103,9 +131,10 @@ $("document").ready(function() {
 			newDiv.setAttribute('index', i);
 			var innerHTML = '<div style=\"float:left\"><img src=\"' + item.image + '\"/></div>'; 
 			innerHTML += 	'<h2 style=\"margin:0\">' + item.name + '</h2>';
-			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '</p>';
+			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '<br>' + item.currency + '</p>';
 			innerHTML += 	'<div class=\"checkitem\" style=\"float:right\">' +
-								'<input type=\"checkbox\">Compare</input>' +
+								'<input type=\"checkbox\" onclick=\"addToCompare(this)\"' +
+								'index=\"' + i + '\"/>Compare' +
 							'</div>';
 			newDiv.innerHTML = innerHTML;
 			cell.appendChild(newDiv);
@@ -113,9 +142,9 @@ $("document").ready(function() {
 			tableRow.appendChild(cell);
 			resultTable.appendChild(tableRow);
 		});
-    });
+	});
 });
 </script>
-<a href="./index.html"> Try other inputs </a>
+
 </body>
 </html>
