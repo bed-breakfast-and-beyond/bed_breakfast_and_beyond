@@ -1,32 +1,67 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- TemplateBeginEditable name="doctitle" -->
-        <title>Untitled Document</title>
+        <title>Bed & Breakfast Beyond</title>
+	<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"
+  type="text/javascript"></script>
+
+
+<script type="text/javascript">
+  function initialize() {
+
+    var input = document.getElementById('fr1');
+    var autocomplete = new google.maps.places.Autocomplete(input, {country: 'NL'});
+
+    autocomplete.bindTo('bounds', map);
+
+    var infowindow = new google.maps.InfoWindow();
+    var marker = new google.maps.Marker({
+      map: map
+    });
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      infowindow.close();
+      var place = autocomplete.getPlace();
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(1107); 
+      }
+
+    });
+
+    setupClickListener('changetype-all', []);
+
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
         </head>
     
-    <body>
+    <body><center>
         
         <div class="container">
             
             <div class="header">
-                <a href="#"><img src="./images/logo.gif" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="193" width="256"></a><div class="content" id="mainbody" align="justify">	
+                <img src="./images/Logo.jpg" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="193" width="256"></a><div class="content" id="mainbody" align="justify">	
                     <form method="post" action="./scrap.php">
-                        <table class="ex1" cellpadding="4">
-                            <tr><td>Place to visit:</td> <td><input name="place" id="fr1" type="text" value="Kona--HI"></td></tr>
-                            <tr><td> Start Date:</td> <td> <input name="startdate" id="fr1" type="date" value="2012/11/22"></td></tr>
-                            <tr><td>  End Date:</td> <td> <input name="enddate" id="fr1" type="date" value="2012/11/23"></td></tr>
-                            <tr><td>  Guests:</td> <td> <input name="guest" id="fr1" type="number" value="15"></td></tr>
-                            <tr><td>  Rooms:</td> <td> <input name="room" id="fr1" type="number" value="1"></td></tr>        
-                            
-                        </table><br>
-                        <input id="sub" type="submit" value="Submit">
+                        <table class="ex1" cellpadding="4" Align="center">
+                            <tr><td>Place to visit:</td><td>Start Date:</td><td>End Date:</td><td>Guests:</td><td>Rooms:</td>
+			    <tr><td><input name="place" id="fr1" type="text" min="3" size="30"></td>
+                            <td><input name="startdate" id="fr1" type="date" value="2012/11/22" ></td>
+                            <td><input name="enddate" id="fr1" type="date" value="2012/11/23" ></td>
+                            <td><input name="guest" id="fr1" type="number" min="1" value="1" ></td>
+                            <td><input name="room" id="fr1" type="number" min="1" value="1" ></td>      
+                    	    <TD><input id="sub" type="submit" value="Search"></TD></tr></table>
                             
                             </form>
                     
                     <!-- end .content --></div>
                 <div class="footer">
-                    <p>***This is a simplified demo for scrapping airbnb.com***</p>
+                   
                     <!-- end .footer --></div>
                 <!-- end .container --></div>
             

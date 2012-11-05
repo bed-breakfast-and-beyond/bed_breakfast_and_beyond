@@ -1,75 +1,263 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/
-libs/jquery/1.3.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <style type="text/css">
 #div-my-tabl {
 	font-family: Arial, Helvetica, sans-serif;
 	background:#FFFFFF;
+	
 }
 
 #title{
 	text-align:center;
 	font-family:Tahoma, Geneva, sans-serif;
 	font-size:36px;
-	text-decoration:underline;
+	
 	outline-color:#090;
 	color:#60C;
 	}
+	
+#comparator{
+	display:none;
+	position:absolute;
+	width:40%;
+	top:10px;
+	
+	
+}
+#result-container{
+	width:75%;
+	margin:0px auto;
+	float:left;
+	padding-left:3%;
+	padding-right:2%;
+}
+#right-column{
+	
+}
+#div-my-tab2 {
+	overflow:auto; 
+	height:300px; 
+	
+}
 
 td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}
 </style>
-</head>
-<body id="div-my-tabl">
-<h2 id="title">Scraped data from Airbnb.com</h2>
 
-<div id="div-my-tabl"></div>
+<script type="text/javascript">
+//Handles scrolling event for comparator
+$(window).on('scroll', function () {
+	var scrollTop = $(window).scrollTop(),
+		elementOffset = $('#div-my-tabl').offset().top,
+		distance = (elementOffset - scrollTop);
+		
+	var comp = document.getElementById('comparator');
+	if(distance < 0 ){
+		comp.style.position = 'fixed';
+		comp.style.width = '35%';
+	}
+	else{
+		comp.style.position = 'absolute';
+		comp.style.width = '40%';
+	}
+	});
+	
+	function showComparator(){
+		var comp = document.getElementById('comparator');
+		comp.style.display = 'block';
+		document.getElementById('div-my-tabl').style.marginLeft = '50%';
+	}
+	
+	function hideComparator(){
+		var comp = document.getElementById('comparator');
+		comp.style.display = 'none';
+		document.getElementById('div-my-tabl').style.marginLeft = '0px';
+	}
+	
+	
+	function addToCompare(currentElement){
+		var comp = document.getElementById('comparator');
+		var index = parseInt(currentElement.getAttribute("index"));
+		
+		//Removes previous compared listing
+		
+		if($('#comparator').length >= 1){
+			var checkboxes = document.getElementsByClassName('checkitem');
+			//alert(checkboxes.length);
+			for(var i = 0; i < checkboxes.length; i+=1)
+			{
+				if(i!=index){
+					checkboxes[i].childNodes[0].checked = false;
+				}
+			}
+			
+			comp.innerHTML = '';
+		}
+		if(currentElement.checked){
+			showComparator();
+			var listing = resultJSON.searchresult[index];
+			
+			var comp = document.getElementById('comparator');
+			var image = document.createElement('img');
+			image.setAttribute('src',listing.image);
+			image.setAttribute('style','float:left;margin:10');
+			comp.appendChild(image);
+			var text = document.createElement('p');
+			text.innerHTML = '<div><h3><a href=\"http://'+ listing.url + '\">'+listing.name + '</a></h3>' + '<br>'+ listing.room+ '<br>' + listing.currency + '</div>';
+			
+			comp.appendChild(text);
+		}
+		else{
+			hideComparator();
+		}
+	}
+	
+	//Global variable for the result JSON object
+	var resultJSON;
+	
+	//Suggested location
+	function displaySuggested(results){
+		var locations = document.createElement('div');
+		locations.setAttribute('style','display:inline;');
+		locations.innerHTML = 'Places nearby '+ resultJSON.place + ':<br>';
+		for(var loc in results){
+			var link = document.createElement('a');
+			link.setAttribute('location',results[loc]);
+			link.innerHTML = results[loc]+'     ';
+			link.setAttribute('onclick','performSuggestedSearch(this)');
+			link.setAttribute('href','#');
+			link.setAttribute('style', 'margin:10px;');
+			locations.appendChild(link);
+		}
+		
+		
+		document.getElementById('header').appendChild(document.createElement('br'));
+		document.getElementById('header').appendChild( locations );
+	}
+	
+	function performSuggestedSearch(location){
+		var form = document.createElement('form');
+		form.setAttribute('method', 'post');
+		form.setAttribute('action', './scrap.php');
+		
+		var place = document.createElement('input');
+		var startdate = document.createElement('input');
+		var enddate = document.createElement('input');
+		var guest = document.createElement('input');
+		var room = document.createElement('input');
+		
+		place.setAttribute('name','place');
+		startdate.setAttribute('name','startdate');
+		enddate.setAttribute('name','enddate');
+		guest.setAttribute('name','guest');
+		room.setAttribute('name','room');
+		
+		place.setAttribute('type','hidden');
+		startdate.setAttribute('type','hidden');
+		enddate.setAttribute('type','hidden');
+		guest.setAttribute('type','hidden');
+		room.setAttribute('type','hidden');
+		
+		place.setAttribute('value',location.getAttribute('location'));
+		startdate.setAttribute('value',resultJSON.startdate);
+		enddate.setAttribute('value',resultJSON.enddate);
+		guest.setAttribute('value',resultJSON.guest);
+		room.setAttribute('value',resultJSON.room);
+		
+		form.appendChild(place);
+		form.appendChild(startdate);
+		form.appendChild(enddate);
+		form.appendChild(guest);
+		form.appendChild(room);
+		
+		document.body.appendChild(form);
+		form.submit();
+		//alert(location.getAttribute('location'));
+	}
+	
+
+</script>
+</head>
+<body>
+
+<div id="header">
+<h2 id="title">Bed Breakfast & Beyond</h2>
+<a href="./index.html"> Enter another search </a>
+</div>
+
+<div id="result-container" style="position:relative">
+	<div id="comparator">Comparator</div>
+	<div id="div-my-tabl"></div>
+</div>
+
+<div id="right-column">
+<h2>Yelp Feature</h2>
+<div id="div-my-tab2"></div>
+<iframe height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11&amp;output=embed"></iframe><br /><small>View <a href="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11" style="color:#0000FF;text-align:left">SJSU</a> in a larger map</small>
+</div>
 
 <script>
 $("document").ready(function() {
 	
-    $.getJSON("results.json", function(data) {
+	$.getJSON("results.json", function(data) {
+		resultJSON = data;
 		$listings = data['searchresult'];
-        $("#div-my-table").text("<table>");
-var urlList = "";
+		var results = document.getElementById('div-my-tabl');
+		var resultTable = document.createElement('table');
+		results.appendChild(resultTable);
+		$.each($listings, function(i, item) {
+			var cell = document.createElement('td');
+			var newDiv = document.createElement('div');
+			newDiv.setAttribute('index', i);
+			var innerHTML = '<div style=\"float:left\"><img src=\"' + item.image + '\"/></div>'; 
+			innerHTML += 	'<h2 style=\"margin:0\"><a href=\"http://' + item.url + '\">' + item.name + '</a></h2>';
+			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '<br>' + item.currency + '</p>';
+			innerHTML += 	'<div class=\"checkitem\" style=\"float:right\">' +
+								'<input type=\"checkbox\" onclick=\"addToCompare(this)\"' +
+								'index=\"' + i + '\"/>Compare' +
+							'</div>';
+			newDiv.innerHTML = innerHTML;
+			cell.appendChild(newDiv);
+			var tableRow = document.createElement('tr');
+			tableRow.appendChild(cell);
+			resultTable.appendChild(tableRow);
+		});
+		
+		displaySuggested(data.suggested);
+	});
+	
+	$.getJSON("yelpResults.json", function(data) {
+		$listings = data['businesses'];
+		
+        $("#div-my-tab2").append("<table>");
+		var urlList = "";
         $.each($listings, function(i, item) {
-			$("#div-my-tabl").append("<tr>");
-			$("#div-my-tabl").append("<td id=1>"+item.name+"</td>");
-			$("#div-my-tabl").append("<br>");
-             /* if (!item.address == false){
-               
-			$("#div-my-tabl").append("<td id=2> At "+item.address+"</td>");
-               
-               }*/
-			   $("#div-my-tabl").append("<td id=3>   "+item.room+"</td>");
-               $("#div-my-tabl").append("<br>");
-			
-			
-			$("#div-my-tabl").append("<td id=4>");
-			$("#div-my-tabl").append("<a href= \"http://www.airbnb.com"+item.url+"\" target =\"_blank\" >More info here</a>");
-			$("#div-my-tabl").append("</td>");
+			$("#div-my-tab2").append("<tr>");
+			$("#div-my-tab2").append("<td id=1>"+item.name+"</td>");
+			$("#div-my-tab2").append("<br>");
+
+			$("#div-my-tab2").append("<td id=4>");
+			$("#div-my-tab2").append("<a href= \""+item.url+"\" target =\"_blank\" >"+item.name+"</a>");
+			$("#div-my-tab2").append("</td>");
 								
-			$("#div-my-tabl").append("<td id=5>");
-			$("#div-my-tabl").append("<img src=\""+item.image+"\"/>");
-			$("#div-my-tabl").append("</td>");
-				
-			$("#div-my-tabl").append("<td id=6>");
-			$("#div-my-tabl").append(" "+item.currency+" per night");
-			$("#div-my-tabl").append("</td>");
+			$("#div-my-tab2").append("<td id=5>");
+			$("#div-my-tab2").append("<img src=\""+item.image_url+"\"/>");
+			$("#div-my-tab2").append("</td>");
 			
-            $("#div-my-tabl").append("</tr>");
-			$("#div-my-tabl").append("<br />");
-			$("#div-my-tabl").append("<br />");
-			$("#div-my-tabl").append("<br />");
+			
+            $("#div-my-tab2").append("</tr>");
+			$("#div-my-tab2").append("<br />");
+			$("#div-my-tab2").append("<br />");
+			$("#div-my-tab2").append("<br />");
 			
         });
 		
-        $("#div-my-table").append("</table>");
+        $("#div-my-tab2").append("</table>");
 
     });
 });
 </script>
-<a href="./index.html"> Try other inputs </a>
+
 </body>
 </html>
