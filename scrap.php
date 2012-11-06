@@ -127,12 +127,13 @@
 		}
         $main5=$e->find('div[class="breadcrumb"]',0)->childNodes(0)->childNodes(0)->text();
 		$main6=$e->find('div[class="listing-description"]',0)->text();
+		$main5=explode('&nbsp;',$main5);
         
         $arr[] = array(    'url' => $main2,
                            'currency' => trim($main4),
                            'image' => $main3,
                            'name' => $main1,
-                           'address' => $main5,
+                           'address' => trim($main5[0]),
 						   'room' => trim($main6),
 						   'source' => 'www.homeaway.co.uk'
                      );
@@ -146,7 +147,7 @@
 
 	$content = file_get_html("http://www.travelmath.com/cities-near/$city[0]+$city[1]");
 
-
+	$sug_response;
 	foreach ($content->find('div[class=boxmiddle]') as $e){
 			$tr = $e -> childNodes(1) -> childNodes(0);
 		for($i=0; $i<2; $i++)	{

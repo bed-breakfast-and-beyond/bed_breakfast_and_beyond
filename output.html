@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <style type="text/css">
 #div-my-tabl {
@@ -34,7 +35,7 @@
 	padding-right:2%;
 }
 #right-column{
-	
+	float:right;
 }
 #div-my-tab2 {
 	overflow:auto; 
@@ -44,7 +45,8 @@
 
 td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}
 </style>
-
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false"
+            type="text/javascript"></script> 
 <script type="text/javascript">
 //Handles scrolling event for comparator
 $(window).on('scroll', function () {
@@ -104,7 +106,7 @@ $(window).on('scroll', function () {
 			image.setAttribute('style','float:left;margin:10');
 			comp.appendChild(image);
 			var text = document.createElement('p');
-			text.innerHTML = '<div><h3><a href=\"http://'+ listing.url + '\">'+listing.name + '</a></h3>' + '<br>'+ listing.room+ '<br>' + listing.currency + '</div>';
+			text.innerHTML = '<div><h3><a href=\"http://'+ listing.url + '\" target=\"blank\">'+listing.name + '</a></h3>' + '<br>'+ listing.room+ '<br>' + listing.currency + '</div>';
 			
 			comp.appendChild(text);
 		}
@@ -176,10 +178,35 @@ $(window).on('scroll', function () {
 		//alert(location.getAttribute('location'));
 	}
 	
+	
+	function displayMap(listings, location){
+	
+		var geocoder = new GClientGeocoder();
+		var map = new GMap2(document.getElementById("map_canvas"));
+		var i;
+		
+		var postcodes = new Array();
+		for(i=0; i < listings.length; i++){
+			postcodes[i] = listings[i].address;
+		}
+		
+		geocoder.getLatLng(location , function (point) {
+		map.setCenter(point, 9)}
+		);
+
+		for (i = 0; i < postcodes.length; i++) {
+			geocoder.getLatLng(postcodes[i], function (point) {         
+				if (point) {
+					map.addOverlay(new GMarker(point));
+				}
+			});
+		}
+		
+	}
 
 </script>
 </head>
-<body>
+<body onunload="GUnload()">
 
 <div id="header">
 <h2 id="title">Bed Breakfast & Beyond</h2>
@@ -194,7 +221,10 @@ $(window).on('scroll', function () {
 <div id="right-column">
 <h2>Yelp Feature</h2>
 <div id="div-my-tab2"></div>
+<div id="map_canvas" style="width: 300px; height: 300px;"></div>
+<!--
 <iframe height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11&amp;output=embed"></iframe><br /><small>View <a href="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11" style="color:#0000FF;text-align:left">SJSU</a> in a larger map</small>
+-->
 </div>
 
 <script>
@@ -211,7 +241,7 @@ $("document").ready(function() {
 			var newDiv = document.createElement('div');
 			newDiv.setAttribute('index', i);
 			var innerHTML = '<div style=\"float:left\"><img src=\"' + item.image + '\"/></div>'; 
-			innerHTML += 	'<h2 style=\"margin:0\"><a href=\"http://' + item.url + '\">' + item.name + '</a></h2>';
+			innerHTML += 	'<h2 style=\"margin:0\"><a href=\"http://' + item.url + '\" target=\"blank\">' + item.name + '</a></h2>';
 			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '<br>' + item.currency + '</p>';
 			innerHTML += 	'<div class=\"checkitem\" style=\"float:right\">' +
 								'<input type=\"checkbox\" onclick=\"addToCompare(this)\"' +
@@ -223,8 +253,10 @@ $("document").ready(function() {
 			tableRow.appendChild(cell);
 			resultTable.appendChild(tableRow);
 		});
-		
+		//Display Suggested Location
 		displaySuggested(data.suggested);
+		//Display Google Map
+		displayMap(data['searchresult'],data['place']);
 	});
 	
 	$.getJSON("yelpResults.json", function(data) {
