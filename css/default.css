@@ -1,0 +1,49 @@
+#div-my-tabl {
+	font-family: Arial, Helvetica, sans-serif;
+	background:#FFFFFF;
+	
+}
+
+#title{
+	text-align:center;
+	font-family:Tahoma, Geneva, sans-serif;
+	font-size:36px;
+	
+	outline-color:#090;
+	color:#60C;
+	}
+	
+#comparator{
+	display:none;
+	position:absolute;
+	width:40%;
+	top:10px;
+	
+	
+}
+#result-container{
+	width:60%;
+	margin:0px auto;
+	float:left;
+	padding-left:3%;
+	padding-right:2%;
+}
+#map_canvas{
+	overflow:auto;
+	height:300px;
+	width: 300px;
+	position:absolute;
+	right: 10px;
+	top:550px;
+}
+#div-my-tab2 {
+	overflow:auto; 
+	height:300px;
+	width:300px;
+	position: absolute;
+	right: 10px;
+	top:230px;
+	
+}
+
+td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}

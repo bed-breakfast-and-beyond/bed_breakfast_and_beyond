@@ -1,52 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8">
+ 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<style type="text/css">
-#div-my-tabl {
-	font-family: Arial, Helvetica, sans-serif;
-	background:#FFFFFF;
-	
-}
+<link href="./css/default.css" rel="stylesheet" type="text/css" />
 
-#title{
-	text-align:center;
-	font-family:Tahoma, Geneva, sans-serif;
-	font-size:36px;
-	
-	outline-color:#090;
-	color:#60C;
-	}
-	
-#comparator{
-	display:none;
-	position:absolute;
-	width:40%;
-	top:10px;
-	
-	
-}
-#result-container{
-	width:75%;
-	margin:0px auto;
-	float:left;
-	padding-left:3%;
-	padding-right:2%;
-}
-#right-column{
-	float:right;
-}
-#div-my-tab2 {
-	overflow:auto; 
-	height:300px; 
-	
-}
+<!-- Loads Features -->
+<script src="comparator.js" type="text/javascript"></script>
+<script src="suggestedlocation.js" type="text/javascript"></script>
+<script src="yelp.js" type="text/javascript"></script>
+<script type="text/javascript" src="DisplayMap.js"></script>
 
-td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}
-</style>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false"
-            type="text/javascript"></script> 
 <script type="text/javascript">
 //Handles scrolling event for comparator
 $(window).on('scroll', function () {
@@ -57,7 +21,7 @@ $(window).on('scroll', function () {
 	var comp = document.getElementById('comparator');
 	if(distance < 0 ){
 		comp.style.position = 'fixed';
-		comp.style.width = '35%';
+		comp.style.width = '30%';
 	}
 	else{
 		comp.style.position = 'absolute';
@@ -65,145 +29,9 @@ $(window).on('scroll', function () {
 	}
 	});
 	
-	function showComparator(){
-		var comp = document.getElementById('comparator');
-		comp.style.display = 'block';
-		document.getElementById('div-my-tabl').style.marginLeft = '50%';
-	}
-	
-	function hideComparator(){
-		var comp = document.getElementById('comparator');
-		comp.style.display = 'none';
-		document.getElementById('div-my-tabl').style.marginLeft = '0px';
-	}
-	
-	
-	function addToCompare(currentElement){
-		var comp = document.getElementById('comparator');
-		var index = parseInt(currentElement.getAttribute("index"));
-		
-		//Removes previous compared listing
-		
-		if($('#comparator').length >= 1){
-			var checkboxes = document.getElementsByClassName('checkitem');
-			//alert(checkboxes.length);
-			for(var i = 0; i < checkboxes.length; i+=1)
-			{
-				if(i!=index){
-					checkboxes[i].childNodes[0].checked = false;
-				}
-			}
-			
-			comp.innerHTML = '';
-		}
-		if(currentElement.checked){
-			showComparator();
-			var listing = resultJSON.searchresult[index];
-			
-			var comp = document.getElementById('comparator');
-			var image = document.createElement('img');
-			image.setAttribute('src',listing.image);
-			image.setAttribute('style','float:left;margin:10');
-			comp.appendChild(image);
-			var text = document.createElement('p');
-			text.innerHTML = '<div><h3><a href=\"http://'+ listing.url + '\" target=\"blank\">'+listing.name + '</a></h3>' + '<br>'+ listing.room+ '<br>' + listing.currency + '</div>';
-			
-			comp.appendChild(text);
-		}
-		else{
-			hideComparator();
-		}
-	}
-	
-	//Global variable for the result JSON object
+	//Global variables for the result JSON object and comparator class
 	var resultJSON;
-	
-	//Suggested location
-	function displaySuggested(results){
-		var locations = document.createElement('div');
-		locations.setAttribute('style','display:inline;');
-		locations.innerHTML = 'Places nearby '+ resultJSON.place + ':<br>';
-		for(var loc in results){
-			var link = document.createElement('a');
-			link.setAttribute('location',results[loc]);
-			link.innerHTML = results[loc]+'     ';
-			link.setAttribute('onclick','performSuggestedSearch(this)');
-			link.setAttribute('href','#');
-			link.setAttribute('style', 'margin:10px;');
-			locations.appendChild(link);
-		}
-		
-		
-		document.getElementById('header').appendChild(document.createElement('br'));
-		document.getElementById('header').appendChild( locations );
-	}
-	
-	function performSuggestedSearch(location){
-		var form = document.createElement('form');
-		form.setAttribute('method', 'post');
-		form.setAttribute('action', './scrap.php');
-		
-		var place = document.createElement('input');
-		var startdate = document.createElement('input');
-		var enddate = document.createElement('input');
-		var guest = document.createElement('input');
-		var room = document.createElement('input');
-		
-		place.setAttribute('name','place');
-		startdate.setAttribute('name','startdate');
-		enddate.setAttribute('name','enddate');
-		guest.setAttribute('name','guest');
-		room.setAttribute('name','room');
-		
-		place.setAttribute('type','hidden');
-		startdate.setAttribute('type','hidden');
-		enddate.setAttribute('type','hidden');
-		guest.setAttribute('type','hidden');
-		room.setAttribute('type','hidden');
-		
-		place.setAttribute('value',location.getAttribute('location'));
-		startdate.setAttribute('value',resultJSON.startdate);
-		enddate.setAttribute('value',resultJSON.enddate);
-		guest.setAttribute('value',resultJSON.guest);
-		room.setAttribute('value',resultJSON.room);
-		
-		form.appendChild(place);
-		form.appendChild(startdate);
-		form.appendChild(enddate);
-		form.appendChild(guest);
-		form.appendChild(room);
-		
-		document.body.appendChild(form);
-		form.submit();
-		//alert(location.getAttribute('location'));
-	}
-	
-	
-	function displayMap(listings, location){
-	
-		var geocoder = new GClientGeocoder();
-		var map = new GMap2(document.getElementById("map_canvas"));
-		var i;
-		
-		var postcodes = new Array();
-		for(i=0; i < listings.length; i++){
-			postcodes[i] = listings[i].address;
-		}
-		
-		geocoder.getLatLng(location , function (point) {
-		map.setCenter(point, 9)}
-		);
-
-		for (i = 0; i < postcodes.length; i++) {
-			geocoder.getLatLng(postcodes[i], function (point) {         
-				if (point) {
-					map.addOverlay(new GMarker(point));
-				}
-			});
-		}
-		
-	}
-
+	var comparator;
 </script>
 </head>
 <body onunload="GUnload()">
@@ -219,18 +47,19 @@ $(window).on('scroll', function () {
 </div>
 
 <div id="right-column">
-<h2>Yelp Feature</h2>
-<div id="div-my-tab2"></div>
-<div id="map_canvas" style="width: 300px; height: 300px;"></div>
-<!--
-<iframe height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11&amp;output=embed"></iframe><br /><small>View <a href="https://www.google.com/maps/ms?msa=0&amp;msid=213748104701094049405.0004cda4b7a82b8ebffdc&amp;ie=UTF8&amp;t=m&amp;source=embed&amp;z=11" style="color:#0000FF;text-align:left">SJSU</a> in a larger map</small>
--->
+<h2 align="center">Yelp Feature</h2>
+<div id="div-my-tab2"></div><BR>
+<BR><div id="map_canvas"></div>
+
 </div>
 
 <script>
+
+//Fills page with results from the JSON string
 $("document").ready(function() {
-	
+	comparator = new Comparator(document.getElementById('comparator'), document.getElementById('div-my-tabl'));
 	$.getJSON("results.json", function(data) {
+		
 		resultJSON = data;
 		$listings = data['searchresult'];
 		var results = document.getElementById('div-my-tabl');
@@ -244,7 +73,7 @@ $("document").ready(function() {
 			innerHTML += 	'<h2 style=\"margin:0\"><a href=\"http://' + item.url + '\" target=\"blank\">' + item.name + '</a></h2>';
 			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '<br>' + item.currency + '</p>';
 			innerHTML += 	'<div class=\"checkitem\" style=\"float:right\">' +
-								'<input type=\"checkbox\" onclick=\"addToCompare(this)\"' +
+								'<input type=\"checkbox\" onclick=\"comparator.addToCompare(this,resultJSON.searchresult)\"' +
 								'index=\"' + i + '\"/>Compare' +
 							'</div>';
 			newDiv.innerHTML = innerHTML;
@@ -254,42 +83,14 @@ $("document").ready(function() {
 			resultTable.appendChild(tableRow);
 		});
 		//Display Suggested Location
-		displaySuggested(data.suggested);
+		displaySuggested(data.suggested,document.getElementById('header'));
 		//Display Google Map
 		displayMap(data['searchresult'],data['place']);
 	});
 	
-	$.getJSON("yelpResults.json", function(data) {
-		$listings = data['businesses'];
-		
-        $("#div-my-tab2").append("<table>");
-		var urlList = "";
-        $.each($listings, function(i, item) {
-			$("#div-my-tab2").append("<tr>");
-			$("#div-my-tab2").append("<td id=1>"+item.name+"</td>");
-			$("#div-my-tab2").append("<br>");
-
-			$("#div-my-tab2").append("<td id=4>");
-			$("#div-my-tab2").append("<a href= \""+item.url+"\" target =\"_blank\" >"+item.name+"</a>");
-			$("#div-my-tab2").append("</td>");
-								
-			$("#div-my-tab2").append("<td id=5>");
-			$("#div-my-tab2").append("<img src=\""+item.image_url+"\"/>");
-			$("#div-my-tab2").append("</td>");
-			
-			
-            $("#div-my-tab2").append("</tr>");
-			$("#div-my-tab2").append("<br />");
-			$("#div-my-tab2").append("<br />");
-			$("#div-my-tab2").append("<br />");
-			
-        });
-		
-        $("#div-my-tab2").append("</table>");
-
-    });
+	loadYelpResults(document.getElementById('div-my-tab2'));
 });
 </script>
 
-</body>
-</html>
+
+</body></html>
