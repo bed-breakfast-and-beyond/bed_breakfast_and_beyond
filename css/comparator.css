@@ -1,15 +1,38 @@
 div.compared{
     display:block;
+    height:100%;
 }
 
 div.viewing_panel{
     display:none;
+    height:100%;
 }
+
+#compared{
+    width:100%;
+    height:100%;
+}
+
 #current{
-    height:80%;
+    width:100%;
+    height:100%;
 }
 
 table.table{
-    height:95%
-    width:90%;
+    height:95%;
+    width:70%;
+    float:left;
 }
+
+#results{
+    float:right;
+    height:95%;
+    overflow:auto;
+    width:30%;
+}
+
+button.viewing_panel_button{
+    display:none;
+}
+
+img.pic{ width:200px; height:100px;	 }

@@ -79,8 +79,9 @@ function Comparator(comparator, listings){
 }
 
 function enterComparator(listings, currentListing, form){
-    var serializeListings = JSON.stringify(listings, null, 2);
-    var serializeCurrentListing = JSON.stringify(listings.searchresult[currentListing], null, 2);
+    var serializeListings = JSON.stringify(listings);
+    var serializeCurrentListing = JSON.stringify(listings.searchresult[currentListing]);
+    
     
     form.setAttribute("method","post");
     form.setAttribute("action","comparator.php");

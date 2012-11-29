@@ -57,8 +57,7 @@ div.overlay{
 div.overlay-container{
 	
 	position:fixed;
-	width:86%;
-	left:5%;
+	width:95%;
 	top:50px;
 	height:80%;
 	border-style:solid;
@@ -76,7 +75,7 @@ div.overlay:target{
 }
 #listing_details{
     background-color:white;
-    width:70%;
+    width:72%;
     height:90%;
 	float:left;
 	margin:10px;

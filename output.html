@@ -6,6 +6,7 @@
 
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyATIo38F3Q8qEhyMq-pS_AZmViqEThMOh8&amp;sensor=false"
             type="text/javascript"></script>
+<script src="json2.js"></script>
 <link href="./css/default.css" rel="stylesheet" type="text/css" />
 
 <!-- Loads Features -->
@@ -38,6 +39,7 @@ $(window).on('scroll', function () {
         currentIndex = index;
 		$("body").css('overflow','hidden');
 		displayMap(null,resultJSON.searchresult[index].address);
+        $('#current_listing').attr('href',url);
     }
 	function hideListing(){
 		
@@ -82,6 +84,7 @@ $(window).on('scroll', function () {
 			<iframe id="listing_details" src="./loading.gif"></iframe>
 			<div id="map_canvas" style="float:right"></div>
 			<div class="listing_menu">
+                <a id="current_listing" href="" target="_blank">Open in new Window</a>
 				<button onclick="enterComparator(resultJSON, currentIndex, document.getElementById(&quot;compare_form&quot;));">Compare this listing</button>
 				<button onclick="hideListing();">Close</button>
 			</div>
