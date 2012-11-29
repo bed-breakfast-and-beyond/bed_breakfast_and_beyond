@@ -77,3 +77,27 @@ function Comparator(comparator, listings){
 	}
 
 }
+
+function enterComparator(listings, currentListing, form){
+    var serializeListings = JSON.stringify(listings, null, 2);
+    var serializeCurrentListing = JSON.stringify(listings.searchresult[currentListing], null, 2);
+    
+    form.setAttribute("method","post");
+    form.setAttribute("action","comparator.php");
+    form.setAttribute("target","_blank");
+    
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type","hidden");
+    hiddenField.setAttribute("name","resultJSON");
+    hiddenField.setAttribute("value",serializeListings);
+    
+    var hiddenField2 = document.createElement("input");
+    hiddenField2.setAttribute("type","hidden");
+    hiddenField2.setAttribute("name","selected");
+    hiddenField2.setAttribute("value",serializeCurrentListing);
+    
+    form.appendChild(hiddenField);
+    form.appendChild(hiddenField2);
+    
+    form.submit();
+}

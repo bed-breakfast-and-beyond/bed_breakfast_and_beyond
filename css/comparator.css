@@ -1,0 +1,15 @@
+div.compared{
+    display:block;
+}
+
+div.viewing_panel{
+    display:none;
+}
+#current{
+    height:80%;
+}
+
+table.table{
+    height:95%
+    width:90%;
+}
