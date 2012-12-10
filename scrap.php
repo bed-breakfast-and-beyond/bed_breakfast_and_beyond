@@ -1,4 +1,11 @@
 <?php
+    /*
+     * Converts currency from one type to another
+     * @param $amount The amount of currency to convert
+     * @param $from_currency The source currency type
+     * @param $to_currrency The converted currency type
+     * @return Numerical value of the converted currency type
+     */
 	function ConvertCurrency($amount,$from_currency,$to_currency)
 	{
 		$string = $amount.strtolower($from_currency)."=?".strtolower($to_currency);
@@ -9,11 +16,14 @@
 		$conto = explode(' ', $result[3]);
 		return $conto[0];
 	}
-	
+	/*
+     * Get local resturants from Yelp using its API. The results get written to yelpResults.json.  Relies on yelp.php.
+     * @param $location The location of where to search for restaurants in.
+     */
 	function getYelpInfo($location){
 		$yelpdest = str_replace(array(" ", ","), array( "+", "%2C"), $location);
 		$yelpdom = getYelpData($location);
-		$fp = fopen('yelpResults.json', 'w');
+		$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/yelpResults.json', 'w');
 		fwrite($fp, $yelpdom);
 		fclose($fp);
 	}
@@ -22,6 +32,7 @@
 	include('simple_html_dom.php');
 	include('yelp.php');
 	
+    //Gets parameters from Post request
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		$place = $_POST['place'];
 		if(array_key_exists('startdate', $_POST))
@@ -36,7 +47,7 @@
 		$guest = $_POST['guest'];
 		$room = $_POST['room'];
 	}
-	else{
+	else{ //Gets parameters from Get request
 		$place = $_GET['place'];
 		if(array_key_exists('startdate', $_GET))
 			$startdate = $_POST['startdate'];
@@ -59,21 +70,22 @@
 	//Uses Yelp API to get restaurants nearby
 	getYelpInfo($place);
 	
+    //Change input to match the 2 aggregated sites format
 	$airdest = str_replace(array(" ", ","), array("-", "--"), $place);
 	$homedest = str_replace(array(" ", ","), array( "+", "%2C"), $place);
 	
+    //Gathered user start date and stored as an array
 	$startdate = array( 'y' => substr($startdate,0,4),
 						 'm' => substr($startdate,5,2),
 						 'd' => substr($startdate,8,2)
 						 );
 						 
-	
+	//Gathered user end date and stored as an array
 	$enddate = array( 'y' => substr($enddate,0,4),
 						 'm' => substr($enddate,5,2),
 						 'd' => substr($enddate,8,2)
 						 );
 						 
-    $myFile = "File.json";
     
     // Retrieve the DOM from airbnb
     $airdom = file_get_html("https://www.airbnb.com/s/$airdest?checkin=$startdate[m]%2F$startdate[d]%2F$startdate[y]&checkout=$enddate[m]%2F$enddate[d]%2F$enddate[y]&guests=$guest");
@@ -86,7 +98,7 @@
 	 * Scrap data from "www.airbnb.com" to get bed and breakfast locations
 	 */
     foreach ($airdom->find('ul li.search_result') as $e){
-        $main1=$e->find('div[class=pop_image_small]',0)->childNodes(0)->getAttribute('title');
+        $main1=str_replace('&amp;', '&', $e->find('div[class=pop_image_small]',0)->childNodes(0)->getAttribute('title')  );
         $main2='www.airbnb.com' . $e->find('div[class=pop_image_small]',0)->childNodes(0)->getAttribute('href');
         $main3=$e->find('div[class=pop_image_small]',0)->childNodes(0)->childNodes(0)->getAttribute('data-original');
         $main4=$e->find('div[class=price]',0)->find('div[@class=price_data]',0)->text();
@@ -101,8 +113,6 @@
 						   'room' => trim($main6),
 						   'source' => 'www.airbnb.com'
                      );
-       // echo "\n\t".$main5."\n";
-      // $i = $i+1;
 	}
 		
 	/*
@@ -140,7 +150,7 @@
 	}
 	
 	/*
-	 * Scrap data from "www.travelmath.com" to get nearby cities.
+	 * Scrap data from "www.travelmath.com" to get nearby cities.  Used for Suggested Location feature
 	 */
 	$city = explode(" ", $place);
 	$city[] ="";
@@ -164,7 +174,9 @@
 
 	
 	
-	
+	/*
+     * Gathered all scrapped data and compiled into a single JSON object
+     */
     $response = array(
 		'searchresult' => $arr,
 		'suggested' => $sug_response,
@@ -175,11 +187,13 @@
 		'room' => $room
 	);
     
-    $fp = fopen('results.json', 'w');
+    //Writes out the JSON file to the root folder of the server.
+    $fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/results.json', 'w');
     fwrite($fp, json_encode($response));
     fclose($fp);
 
     $airdom->clear();
+    //Display the output.html which will display the results.
     $homepage = file_get_contents('./output.html', false);
 	echo $homepage;               
 				       

@@ -1,7 +1,26 @@
+#header {
+    width:80%;
+    margin-left:10%;
+}
+#top {
+    min-width:1000px;
+}
 #div-my-tabl {
 	font-family: Arial, Helvetica, sans-serif;
-	background:#FFFFFF;
 	
+}
+
+div.list{
+    border-style:ridge;
+    padding:5pt;
+    border-radius:5pt;
+    -moz-border-radius:5pt;
+}
+
+#right-column{
+    margin-right:20pt;
+    float:right;
+    width:25%;
 }
 
 #title{
@@ -11,38 +30,22 @@
 	
 	outline-color:#090;
 	color:#60C;
-	}
-	
-#comparator{
-	display:none;
-	position:absolute;
-	width:40%;
-	top:10pt;
-	
-	
 }
+	
+
 #result-container{
-	width:60%;
-	margin:0pt auto;
-	float:left;
-	padding-left:3%;
-	padding-right:2%;
+	width:65%;
+	margin:0pt auto 0 20pt;
 }
-#map_canvas{
-	overflow:auto;
-	float:left;
-	height:300px;
-	width: 24%;
-	position:relative;
-	margin:10px;
-}
+
 #div-my-tab2 {
 	overflow:auto; 
 	height:300px;
-	width:300px;
-	position: absolute;
-	right: 10px;
-	top:230px;
+	width:100%;
+	position: relative;
+	border-style:double;
+    padding:3pt;
+    background-color:white;
 	
 }
 
@@ -51,7 +54,8 @@ div.overlay{
 	height:100%;
 	background-color:rgba(0,0,0,0.5);
 	position:absolute;
-	display:none;
+    left:-2000%;
+    overflow:hidden;
 }
 
 div.overlay-container{
@@ -72,6 +76,7 @@ div.overlay-container{
 }
 div.overlay:target{
 	display:block;
+    left:1%;
 }
 #listing_details{
     background-color:white;
@@ -80,14 +85,28 @@ div.overlay:target{
 	float:left;
 	margin:10px;
 }
+#map_canvas{
+	overflow:auto;
+	float:left;
+	height:300px;
+	width: 24%;
+	position:relative;
+	margin:10px;
+}
+
 #listing_details2{
-	display:none;
-	
+	display:none;	
 }
 div.listing_menu{
     float:right;
 }
 
-img.pic{ width:200px; height:100px;	 }
+img.pic{ 
+    width:200px; 
+    height:100px;	 
+    border-style:ridge;
+    border-radius:5pt;
+    -moz-border-radius:5pt;
+}
 
 td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}
