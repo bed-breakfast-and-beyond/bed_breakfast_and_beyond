@@ -1,3 +1,6 @@
+#comparator{
+    margin-top:20pt;
+}
 div.compared{
     display:block;
     height:100%;
@@ -20,7 +23,7 @@ div.viewing_panel{
 
 table.table{
     height:95%;
-    width:70%;
+    width:68%;
     float:left;
 }
 
@@ -29,10 +32,12 @@ table.table{
     height:95%;
     overflow:auto;
     width:30%;
+    border-style:solid;
+    background-color:white;
 }
 
 button.viewing_panel_button{
     display:none;
 }
 
-img.pic{ width:200px; height:100px;	 }
+img.pic{ width:150px; height:75px;	 }

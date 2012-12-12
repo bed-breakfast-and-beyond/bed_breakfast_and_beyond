@@ -15,6 +15,7 @@ div.list{
     padding:5pt;
     border-radius:5pt;
     -moz-border-radius:5pt;
+    padding:4pt;
 }
 
 #right-column{
@@ -104,9 +105,10 @@ div.listing_menu{
 img.pic{ 
     width:200px; 
     height:100px;	 
-    border-style:ridge;
+    margin-right:5pt;
     border-radius:5pt;
     -moz-border-radius:5pt;
+    float:left;
 }
 
 td[id *="1"]{color:#F30;font-size:24px;font-stretch:semi-expanded;font-style:oblique;}

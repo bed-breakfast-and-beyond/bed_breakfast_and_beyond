@@ -4,7 +4,8 @@
 <title>Comparator</title>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 
-<link href="./css/comparator.css" rel="stylesheet" type="text/css" />
+<!-- Loads style sheet for this page -->
+<link href="./comparator.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 var comparedListing;
 
@@ -20,9 +21,9 @@ $("document").ready(function() {
 			var newDiv = document.createElement('div');
 			newDiv.setAttribute('index', i);
 			var innerHTML = '<div class=\"list\" style=\"float:left\"><img class = \"pic\" src=\"' + item.image + '\"/></div>'; 
-            innerHTML += 	'<h2 style=\"margin:0\" ><a href=\"#" onclick=\"loadViewingPanel(' + i + ')\">' +
+            innerHTML += 	'<h2 style=\"margin:0 0 0 150px;\" ><a href=\"#" onclick=\"loadViewingPanel(' + i + ')\">' +
             item.name + '</a></h2>';
-			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '<br>' + item.currency + '</p>';
+			innerHTML += 	'<p style=\"margin:0 0 0 150px;\">     ' + item.room + '<br>' + item.currency + '</p>';
 
 			newDiv.innerHTML = innerHTML;
 			cell.appendChild(newDiv);
@@ -35,12 +36,15 @@ $("document").ready(function() {
         );
         
         var sourceHTML = 'https://' + selected.url;
+        //Loads user current selection
         $('#current').attr('src', sourceHTML);
-
-
 
 });
 
+/*
+ * Loads the viewing panel for comparison
+ * @param index The index where the listing is located in the array of listings
+ */
 function loadViewingPanel(index){
     comparedListing = resultJSON.searchresult[index];
     var sourceHTML = 'https://' + comparedListing.url;
@@ -50,6 +54,9 @@ function loadViewingPanel(index){
     $('.viewing_panel_button').css('display','block');
 }
 
+/*
+ * Replaces the current selection with the one displayed in the viewing panel
+ */
 function replaceCurrent(){
     $('.viewing_panel_button').css('display','none');
     var sourceHTML = 'https://' + comparedListing.url;
@@ -57,17 +64,27 @@ function replaceCurrent(){
     $('.viewing_panel').css('display','none');
 }
 
+/*
+ * Opens the current selection's url inside the current window
+ */
 function goToCurrent(){
     window.location=$('#current').attr('src');
 }
 
 </script>
 </head>
-<body>
+<body bgcolor="#6e80e6">
 
-<!-- Put Banner here -->
+
 <div id="comparator">
     <table class="table">
+    <tr>
+        <td>
+            <p>Current Selection</p>
+        </td>
+        <td>
+        </td>
+    </tr>
     <tr>
         <td>
             <div class="compared">
@@ -83,9 +100,11 @@ function goToCurrent(){
     <tr>
         <td>
             <button onclick="goToCurrent();">Book it!</button>
+            <br>
+            <p style="margin:0pt; font-size:10pt; font-style:italic;">This will redirect you to the original site</p>
         </td>
         <td>
-            <button class="viewing_panel_button">Replace</button>
+            <button class="viewing_panel_button">Replace Current Selection</button>
         </td>
     </tr>
     </table>
@@ -93,5 +112,5 @@ function goToCurrent(){
     </div>
     
 </div>
-<button onclick="window.close();">Close</button>
+<button onclick="window.close();">Close this Window.</button>
 </body></html>
