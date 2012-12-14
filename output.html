@@ -95,8 +95,10 @@
 //Fills page with results from the JSON string
 $("document").ready(function() {
     //Gets the json for the scrap data from airbnb and homeaway
-	
-		$listings = resultJSON['searchresult'];
+	$.getJSON("./results.json", function(data) {
+		
+        resultJSON = data;
+		$listings = data['searchresult'];
 		var results = document.getElementById('div-my-tabl');
 		var resultTable = document.createElement('table');
 		results.appendChild(resultTable);
@@ -110,7 +112,7 @@ $("document").ready(function() {
             //newDiv.setAttribute('style', 'border-style:ridge;padding:5pt;');
             
 			var innerHTML = '<div class=\"list\">';
-            if(item.currency !== "NA")
+            if(item.currency !== "Price not available")
                 innerHTML +=    '<p style=\"float:right;font-size:25pt;margin:0;\">' + item.currency + '</p>'; 
             innerHTML +=    '<img class = \"pic\" src=\"' + item.image + '\"/>';
             innerHTML += 	'<h2 style=\"margin:0\" ><a href=\"#overlay\" onclick=\"loadListing(&quot;https://' + item.url + '&quot;,' + i +')\">' + item.name + '</a></h2>';
@@ -124,14 +126,13 @@ $("document").ready(function() {
 			resultTable.appendChild(tableRow);
 		});
 		//Display Suggested Location
-		displaySuggested(resultJSON.suggested,document.getElementById('header'));
+		displaySuggested(data.suggested,document.getElementById('header'));
 		
-	
+	});
 	
     //Loads and display the Local Restaurants
 	loadYelpResults(document.getElementById('div-my-tab2'));
 });
 </script>
-
 
 </body></html>
