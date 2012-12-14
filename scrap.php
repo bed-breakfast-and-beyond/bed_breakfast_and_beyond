@@ -126,7 +126,7 @@
 		if($main4->find('div[class=rateType]', 0) != null){
 			if(trim($main4->find('div[class=rateType]', 0)->childNodes(0)->text()) === 'Nightly'){
 				$dollar = intval(substr($main4->childNodes(0)->childNodes(0)->childNodes(1)->text(),2));
-				$main4 = '$' . strval(round(ConvertCurrency($dollar, 'GBP', 'USD'), 0));
+				$main4 = '$' . strval(round(ConvertCurrency($dollar, 'GBP', 'USD'), 0)) . ' USD';
 			}
 			else{
 				$main4 = 'Price not available';
@@ -188,13 +188,23 @@
 	);
     
     //Writes out the JSON file to the root folder of the server.
+    /* No longer used but will be kept for debugging purposes
     $fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/results.json', 'w');
     fwrite($fp, json_encode($response));
     fclose($fp);
+    */
 
     $airdom->clear();
-    //Display the output.html which will display the results.
-    $homepage = file_get_contents('./output.html', false);
-	echo $homepage;               
+             
 				       
+?>
+
+<script language="javascript" type="text/javascript" charset="utf-8">
+    //Passes the scrap data in php and converts it to a javascript JSON object
+    var resultJSON = <?php print json_encode($response); ?>;
+</script>
+
+<?php
+    $homepage = file_get_contents('./output.html', false);
+	echo $homepage;
 ?>

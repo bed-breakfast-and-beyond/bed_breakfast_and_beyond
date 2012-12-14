@@ -57,7 +57,7 @@
 			<table width="70%" border="4"  color="#727fd4" align="center">
                 <td align="left"border="4" width="80%">
                     <a href=".">
-                    <img src="./images/Logo.jpg" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="50%" width="100%"></a><div class="content" id="mainbody" align="justify">
+                    <img src="./Logo.jpg" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="50%" width="100%"></a><div class="content" id="mainbody" align="justify">
                     </a>
                 </td>
 
@@ -95,10 +95,8 @@
 //Fills page with results from the JSON string
 $("document").ready(function() {
     //Gets the json for the scrap data from airbnb and homeaway
-	$.getJSON("./results.json", function(data) {
-		
-        resultJSON = data;
-		$listings = data['searchresult'];
+	
+		$listings = resultJSON['searchresult'];
 		var results = document.getElementById('div-my-tabl');
 		var resultTable = document.createElement('table');
 		results.appendChild(resultTable);
@@ -112,7 +110,7 @@ $("document").ready(function() {
             //newDiv.setAttribute('style', 'border-style:ridge;padding:5pt;');
             
 			var innerHTML = '<div class=\"list\">';
-            if(item.currency !== "Price not available")
+            if(item.currency !== "NA")
                 innerHTML +=    '<p style=\"float:right;font-size:25pt;margin:0;\">' + item.currency + '</p>'; 
             innerHTML +=    '<img class = \"pic\" src=\"' + item.image + '\"/>';
             innerHTML += 	'<h2 style=\"margin:0\" ><a href=\"#overlay\" onclick=\"loadListing(&quot;https://' + item.url + '&quot;,' + i +')\">' + item.name + '</a></h2>';
@@ -126,9 +124,9 @@ $("document").ready(function() {
 			resultTable.appendChild(tableRow);
 		});
 		//Display Suggested Location
-		displaySuggested(data.suggested,document.getElementById('header'));
+		displaySuggested(resultJSON.suggested,document.getElementById('header'));
 		
-	});
+	
 	
     //Loads and display the Local Restaurants
 	loadYelpResults(document.getElementById('div-my-tab2'));
