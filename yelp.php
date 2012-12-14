@@ -8,7 +8,7 @@ function getYelpData($company) {
 	if($company) {
 
 		// Enter the path that the oauth library is in relation to the php file
-		require_once ('lib/OAuth.php');
+		require_once ('./OAuth.php');
 
 		// For example, request business with id 'the-waterboy-sacramento'
 		//$unsigned_url = 'http://api.yelp.com/v2/business/' . $company;

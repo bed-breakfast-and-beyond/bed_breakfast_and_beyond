@@ -24,7 +24,7 @@ function loadYelpResults(){
                 listingContainer.innerHTML += "<img style=\"float:left;\" src=\""+item.image_url+"\"/>";
             }
             //Display the name and the rating
-            listingContainer.innerHTML  += '<a href= \""+item.url+"\" target =\"_blank\" ><h2 style=\"margin:0;\">'
+            listingContainer.innerHTML  += '<a href= \"'+item.url+ '\" target =\"_blank\" ><h2 style=\"margin:0;\">'
                                         +item.name+'</h2></a>';
             listingContainer.innerHTML += '<br><img src=\"' + item.rating_img_url_small + '\" />';
             

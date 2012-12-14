@@ -2,16 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- TemplateBeginEditable name="doctitle" -->
-        <title>Bed & Breakfast Beyond</title>
+        <title>Bed Breakfast & Beyond</title>
 	<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"
   type="text/javascript"></script>
 
 
 <script type="text/javascript">
+/*This function generate autocomplete from user inputs by using the google api*/
   function initialize() {
 
     var input = document.getElementById('fr1');
-    var autocomplete = new google.maps.places.Autocomplete(input, {country: 'NL'});
+    var autocomplete = new google.maps.places.Autocomplete(input, {country: ''});
 
     autocomplete.bindTo('bounds', map);
 
@@ -38,6 +39,7 @@
   google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 <script>
+/*This is an open source javascript date function */
 var dates = {
     convert:function(d) {
         // Converts the date in d to a date-object. The input can be:
@@ -89,6 +91,7 @@ var dates = {
         );
     }
 }
+/*This function validate the users input from the forms*/
 function validateForm()
 {
 var x=document.forms["myform"]["place"].value;
@@ -108,9 +111,9 @@ if(dates.compare(startdate,enddate)>=0)
 
 
 </script>
-<link rel="stylesheet" href="./jquery-ui.css"/>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
 <script src="./jquery-1.8.3.js"></script>
-<script src="./jquery-ui.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script>
 $(function(){
   $( "#datepicker1" ).datepicker({ minDate:-0, maxDate: "+10Y +10D" });
@@ -119,20 +122,22 @@ $(function(){
 </script>
         </head>
     
+	<!--The Begining of the Body content-->
     <body bgcolor="#6e80e6"><center>
         
         <div class="container">
             
             <div class="header"><table width="70%" border="4"  color="#727fd4" align="center">
-                <td align="left"border="4" width="80%"><img src="./images/Logo.png" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="50%" width="100%"></a><div class="content" id="mainbody" align="justify"></td>
+			    <!--The Banner-->
+                <td align="left"border="4" width="80%"><img src="./Logo.jpg" alt="Insert Logo Here" name="Insert_logo" id="Insert_logo" style="background-color: #FFFFFF; display:block;" height="50%" width="100%"></a><div class="content" id="mainbody" align="justify"></td>
 
 				</table><BR><BR><BR><BR><BR>	
                     <form name="myform" action="./scrap.php" onsubmit="return validateForm()" method="post">
                         <table class="ex1" cellpadding="4" Align="center">
                             <tr><td>Place to visit:</td><td>Start Date:</td><td>End Date:</td><td>Guests:</td><td>Rooms:</td>
 			    <tr border="4" cellpadding="4" ><td><input name="place" id="fr1" type="text" min="3" size="30"></td>
-                            <td><input name="startdate"type="text" id="datepicker1" /></td>
-                            <td><input name="enddate" type="text" id="datepicker2" /></td>
+                            <td><input name="startdate"type="text" id="datepicker1" readonly="true" /></td>
+                            <td><input name="enddate" type="text" id="datepicker2" readonly="true"/></td>
 
                             <td><input name="guest" id="fr1" type="number" min="1" value="1" ></td>
                             <td><input name="room" id="fr1" type="number" min="1" value="1" ></td>      

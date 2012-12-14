@@ -94,44 +94,38 @@
 
 //Fills page with results from the JSON string
 $("document").ready(function() {
-    //Gets the json for the scrap data from airbnb and homeaway
-	$.getJSON("./results.json", function(data) {
-		
-        resultJSON = data;
-		$listings = data['searchresult'];
-		var results = document.getElementById('div-my-tabl');
-		var resultTable = document.createElement('table');
-		results.appendChild(resultTable);
-        //Creates each listing and add to the table
-		$.each($listings, function(i, item) {
-            var imgCell = document.createElement('td');
-            imgCell.innerHTML = '<img class = \"pic\" src=\"' + item.image + '\"/>';
-			var cell = document.createElement('td');
-			var newDiv = document.createElement('div');
-			newDiv.setAttribute('index', i);
-            //newDiv.setAttribute('style', 'border-style:ridge;padding:5pt;');
+    
+    $listings = resultJSON['searchresult'];
+    var results = document.getElementById('div-my-tabl');
+    var resultTable = document.createElement('table');
+    results.appendChild(resultTable);
+    //Creates each listing and add to the table
+    $.each($listings, function(i, item) {
+        var imgCell = document.createElement('td');
+        imgCell.innerHTML = '<img class = \"pic\" src=\"' + item.image + '\"/>';
+        var cell = document.createElement('td');
+        var newDiv = document.createElement('div');
+        newDiv.setAttribute('index', i);
             
-			var innerHTML = '<div class=\"list\">';
-            if(item.currency !== "Price not available")
-                innerHTML +=    '<p style=\"float:right;font-size:25pt;margin:0;\">' + item.currency + '</p>'; 
-            innerHTML +=    '<img class = \"pic\" src=\"' + item.image + '\"/>';
-            innerHTML += 	'<h2 style=\"margin:0\" ><a href=\"#overlay\" onclick=\"loadListing(&quot;https://' + item.url + '&quot;,' + i +')\">' + item.name + '</a></h2>';
-			innerHTML += 	'<p style=\"margin:0\">     ' + item.room + '</p>';
-            innerHTML +=    '<p style=\"text-align:right;font-style:italic;\">Source: ' + item.source + '</p></div>';
-			newDiv.innerHTML = innerHTML;
-			cell.appendChild(newDiv);
-			var tableRow = document.createElement('tr');
-            //tableRow.appendChild(imgCell);
-			tableRow.appendChild(cell);
-			resultTable.appendChild(tableRow);
-		});
-		//Display Suggested Location
-		displaySuggested(data.suggested,document.getElementById('header'));
-		
-	});
-	
+        var innerHTML = '<div class=\"list\">';
+        if(item.currency !== "NA")
+            innerHTML += '<p style=\"float:right;font-size:25pt;margin:0;\">' + item.currency + '</p>';
+        innerHTML += '<img class = \"pic\" src=\"' + item.image + '\"/>';
+        innerHTML += '<h2 style=\"margin:0\" ><a href=\"#overlay\" onclick=\"loadListing(&quot;https://' + item.url + '&quot;,' + i +')\">' + item.name + '</a></h2>';
+        innerHTML += '<p style=\"margin:0\"> ' + item.room + '</p>';
+        innerHTML += '<p style=\"text-align:right;font-style:italic;\">Source: ' + item.source + '</p></div>';
+        newDiv.innerHTML = innerHTML;
+        cell.appendChild(newDiv);
+        var tableRow = document.createElement('tr');
+        tableRow.appendChild(cell);
+        resultTable.appendChild(tableRow);
+    });
+    //Display Suggested Location
+    displaySuggested(resultJSON.suggested,document.getElementById('header'));
+
+
     //Loads and display the Local Restaurants
-	loadYelpResults(document.getElementById('div-my-tab2'));
+    loadYelpResults(document.getElementById('div-my-tab2'));
 });
 </script>
 
