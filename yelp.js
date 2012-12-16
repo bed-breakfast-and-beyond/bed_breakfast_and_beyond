@@ -3,8 +3,8 @@
  */	
  
 function loadYelpResults(){
-    $.getJSON("yelpResults.json", function(data) {
-		$listings = data['businesses'];
+
+		$listings = yelpJSON.businesses;
         
         //Create a table
         var uList = $('<table></table>');
@@ -38,5 +38,5 @@ function loadYelpResults(){
         //Add table to website
 		$("#div-my-tab2").append(uList);
 
-    });
+
 }

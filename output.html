@@ -98,6 +98,7 @@ $("document").ready(function() {
     $listings = resultJSON['searchresult'];
     var results = document.getElementById('div-my-tabl');
     var resultTable = document.createElement('table');
+	resultTable.setAttribute('style','width:100%;');
     results.appendChild(resultTable);
     //Creates each listing and add to the table
     $.each($listings, function(i, item) {

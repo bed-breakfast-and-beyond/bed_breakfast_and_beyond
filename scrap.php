@@ -22,10 +22,11 @@
      */
 	function getYelpInfo($location){
 		$yelpdest = str_replace(array(" ", ","), array( "+", "%2C"), $location);
-		$yelpdom = getYelpData($location);
+		$yelpdom = getYelpData($yelpdest);
 		$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/yelpResults.json', 'w');
 		fwrite($fp, $yelpdom);
 		fclose($fp);
+		return $yelpdom;
 	}
 	
 	// Include the library
@@ -68,7 +69,7 @@
 	}
 	
 	//Uses Yelp API to get restaurants nearby
-	getYelpInfo($place);
+	$yelpJSON = getYelpInfo($place);
 	
     //Change input to match the 2 aggregated sites format
 	$airdest = str_replace(array(" ", ","), array("-", "--"), $place);
@@ -202,6 +203,7 @@
 <script language="javascript" type="text/javascript" charset="utf-8">
     //Passes the scrap data in php and converts it to a javascript JSON object
     var resultJSON = <?php print json_encode($response); ?>;
+	var yelpJSON = <?php print $yelpJSON; ?>;
 </script>
 
 <?php
